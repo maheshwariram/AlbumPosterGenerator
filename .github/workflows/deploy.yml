@@ -20,8 +20,8 @@ jobs:
   deploy-prod:
     if: github.ref == 'refs/heads/main'
     environment:
-      name: github-pages-main
-      url: [https://albumposter.maheshwariram.com](https://albumposter.maheshwariram.com)
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,7 +39,7 @@ jobs:
   deploy-dev:
     if: github.ref == 'refs/heads/dev'
     environment:
-      name: github-pages-dev 
+      name: github-pages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
