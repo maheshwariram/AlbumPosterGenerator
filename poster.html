@@ -195,8 +195,9 @@
             function saveImage() {
                 let image = document.querySelector("#image-display img");
                 let link = document.createElement("a");
+                let downloadName = document.getElementById("album-name").value || "poster";
                 link.href = image.src;
-                link.download = "poster.png";
+                link.download = downloadName.toLowerCase();
                 link.click();
             }
         </script>
