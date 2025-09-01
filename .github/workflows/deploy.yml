@@ -37,9 +37,9 @@ jobs:
         uses: actions/deploy-pages@v4
 
   deploy-dev:
-    if: github.ref == 'refs/heads/dev'
+    if: startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main'
     environment:
-      name: github-pages
+      name: github-pages-dev
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
