@@ -1,0 +1,15 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+* {
+	font-family: 'Rubik', sans-serif;
+}
+
+.form-input {
+	@apply mt-1 block w-full rounded-full bg-gray-100 p-3 transition focus:outline-none focus:ring-2 focus:ring-black;
+}
+
+input.left-aligned {
+    @apply pl-6;
+}
