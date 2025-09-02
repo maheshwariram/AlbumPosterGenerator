@@ -75,7 +75,7 @@
         <main class="flex flex-col justify-center items-center text-center flex-grow">
             <h1 class="text-5xl font-bold">Album Poster Generator</h1>
             <p class="mt-4 text-gray-600">
-                To start generating a poster, type in the name of the Album below
+                To start generating a poster, type in the name of the album below
             </p>
             <form on:submit|preventDefault={search} class="mt-8 flex flex-col items-center gap-4 w-full">
                 <div class="relative w-full max-w-md">
@@ -119,7 +119,11 @@
     {:else}
         <div class="w-full">
             <header class="py-8 text-center">
-                <h1 class="text-4xl font-bold">Album Poster Generator</h1>
+
+                <a href="/" class="block text-center no-underline hover:underline">
+                    <h1 class="text-5xl font-bold">Album Poster Generator</h1>
+                </a>
+
                 <form
                         on:submit|preventDefault={search}
                         class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
