@@ -3,6 +3,11 @@ name: Deploy to GitHub Pages (Prod)
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+      - 'LICENSE'
+      - '.gitignore'
+      - 'images/**'
+      - '**.md'
 
   workflow_dispatch:
 
