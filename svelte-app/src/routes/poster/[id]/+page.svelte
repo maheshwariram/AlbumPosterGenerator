@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
+    import { goto } from '$app/navigation';
 
     interface AlbumDetails {
         collectionName: string;
@@ -116,13 +117,38 @@
 
 <div class="grid md:grid-cols-2 h-screen">
     <div class="options-panel p-8 md:p-12 overflow-y-auto">
-        <h1 class="text-3xl font-bold mb-4">Poster Options</h1>
+
+        <div class="flex items-center gap-4 mb-8">
+            <button
+                    type="button"
+                    on:click={() => goto('/')}
+                    class="flex-shrink-0 w-11 h-11 flex items-center justify-center bg-transparent border border-gray-300 text-black rounded-full hover:bg-gray-100 transition"
+                    aria-label="Back to Search"
+            >
+                <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <h1 class="text-3xl font-bold">Poster Options</h1>
+        </div>
+
         {#if albumDetails}
             <form on:submit|preventDefault={generatePoster} class="space-y-6">
                 <div class="grid grid-cols-5">
-                    <label for="album-name" class="block text-sm font-medium mb-1"
-                    >Album Name</label
+                    <label
+                            for="album-name"
+                            class="block text-sm font-medium mb-1"
                     >
+                        Album Name
+                    </label>
                     <input
                             id="album-name"
                             bind:value={albumDetails.collectionName}
@@ -131,9 +157,12 @@
                 </div>
 
                 <div class="grid grid-cols-5">
-                    <label for="album-year" class="block text-sm font-medium mb-1"
-                    >Album Year</label
+                    <label
+                            for="album-year"
+                            class="block text-sm font-medium mb-1"
                     >
+                        Album Year
+                    </label>
                     <input
                             id="album-year"
                             value={new Date(albumDetails.releaseDate).getFullYear()}
@@ -142,9 +171,12 @@
                 </div>
 
                 <div class="grid grid-cols-5">
-                    <label for="album-artist" class="block text-sm font-medium mb-1"
-                    >Album Artist</label
+                    <label
+                            for="album-artist"
+                            class="block text-sm font-medium mb-1"
                     >
+                        Album Artist
+                    </label>
                     <input
                             id="album-artist"
                             bind:value={albumDetails.artistName}
@@ -159,9 +191,12 @@
                             bind:checked={showCopyright}
                             class="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
                     />
-                    <label for="copyright" class="ml-3 block text-sm font-medium text-gray-900"
-                    >Display Copyright info?</label
+                    <label
+                            for="copyright"
+                            class="ml-3 block text-sm font-medium text-gray-900"
                     >
+                        Display Copyright info?
+                    </label>
                 </div>
 
                 <div>
@@ -191,6 +226,13 @@
                             class="w-full bg-black text-white py-3 px-4 rounded-full font-semibold hover:bg-gray-800 disabled:bg-gray-400 transition"
                     >
                         {isGenerating ? 'Generating...' : 'Regenerate Poster'}
+                    </button>
+                    <button
+                            type="button"
+                            on:click={() => goto('/')}
+                            class="mt-2 w-full bg-transparent border border-black text-black py-3 px-4 rounded-full font-semibold hover:bg-gray-100 transition"
+                    >
+                        Back to Search
                     </button>
                 </div>
             </form>
