@@ -1,6 +1,6 @@
 # album poster generator
 
-access the web version [here](https://albumposter.maheshwariram.com/).
+access the web version [here](https://postergen.maheshwariram.com/).
 
 server: [GitHub](https://github.com/maheshwariram/AlbumPosterGeneratorServer), [web](https://postergen-server.maheshwariram.com/).
 
