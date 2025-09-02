@@ -28,8 +28,10 @@
     let isGenerating: boolean = true;
     let showCopyright: boolean = true;
     let imageResolution: string = '';
+    let originalSearchTerm: string = '';
 
     onMount(async () => {
+        originalSearchTerm = $page.url.searchParams.get('q') || '';
         const { id } = $page.params;
         try {
             const response = await fetch(`https://itunes.apple.com/lookup?id=${id}&entity=song`);
@@ -73,7 +75,10 @@
                         trackName: t.trackName,
                         trackTimeMillis: t.trackTimeMillis
                     })),
-                    copyright: showCopyright && albumDetails.copyright ? albumDetails.copyright.replace('℗', '(c)') : ''
+                    copyright:
+                        showCopyright && albumDetails.copyright
+                            ? albumDetails.copyright.replace('℗', '(c)')
+                            : ''
                 })
             });
             if (!response.ok) throw new Error('Poster generation failed on the server');
@@ -121,7 +126,7 @@
         <div class="flex items-center gap-4 mb-8">
             <button
                     type="button"
-                    on:click={() => goto('/')}
+                    on:click={() => goto(`/?q=${encodeURIComponent(originalSearchTerm)}`)}
                     class="flex-shrink-0 w-11 h-11 flex items-center justify-center bg-transparent border border-gray-300 text-black rounded-full hover:bg-gray-100 transition"
                     aria-label="Back to Search"
             >
@@ -229,7 +234,7 @@
                     </button>
                     <button
                             type="button"
-                            on:click={() => goto('/')}
+                            on:click={() => goto(`/?q=${encodeURIComponent(originalSearchTerm)}`)}
                             class="mt-2 w-full bg-transparent border border-black text-black py-3 px-4 rounded-full font-semibold hover:bg-gray-100 transition"
                     >
                         Back to Search

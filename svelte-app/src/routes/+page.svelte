@@ -1,5 +1,8 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+    import { page } from '$app/stores';
     import { goto } from '$app/navigation';
+    import { browser } from '$app/environment';
 
     interface Album {
         collectionId: number;
@@ -13,11 +16,25 @@
     let isLoading: boolean = false;
     let hasSearched: boolean = false;
 
+    onMount(() => {
+        const queryParam = $page.url.searchParams.get('q');
+        if (queryParam) {
+            searchTerm = queryParam;
+            search();
+        }
+    });
+
     async function search() {
         if (!searchTerm.trim()) return;
         isLoading = true;
         hasSearched = true;
         searchResults = [];
+
+        if (browser) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('q', searchTerm);
+            history.pushState({}, '', url);
+        }
 
         try {
             const response = await fetch(
@@ -44,7 +61,7 @@
     }
 
     function goToPoster(collectionId: number) {
-        goto(`/poster/${collectionId}`);
+        goto(`/poster/${collectionId}?q=${encodeURIComponent(searchTerm)}`);
     }
 </script>
 
