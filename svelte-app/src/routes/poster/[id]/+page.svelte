@@ -26,6 +26,7 @@
     let posterUrl: string = '';
     let isGenerating: boolean = true;
     let showCopyright: boolean = true;
+    let imageResolution: string = '';
 
     onMount(async () => {
         const { id } = $page.params;
@@ -56,6 +57,7 @@
         if (!albumDetails) return;
         isGenerating = true;
         posterUrl = '';
+        imageResolution = '';
 
         try {
             const response = await fetch(`https://postergen-server.maheshwariram.com/generate`, {
@@ -84,7 +86,13 @@
         }
     }
 
+    function handleImageLoad(event: Event) {
+        const img = event.target as HTMLImageElement;
+        imageResolution = `${img.naturalWidth}x${img.naturalHeight}`;
+    }
+
     function timeToMMSS(millis: number): string {
+        if (isNaN(millis)) return '00:00';
         const totalSeconds = Math.floor(millis / 1000);
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
@@ -106,61 +114,81 @@
     <title>{albumDetails ? `${albumDetails.collectionName} Poster` : 'Generating Poster...'}</title>
 </svelte:head>
 
-<div class="grid md:grid-cols-2 h-screen bg-gray-50">
-    <div class="options-panel p-6 overflow-y-auto">
-        <h2 class="text-2xl font-bold mb-4">Poster Options</h2>
+<div class="grid md:grid-cols-2 h-screen">
+    <div class="options-panel p-8 md:p-12 overflow-y-auto">
+        <h1 class="text-3xl font-bold mb-4">Poster Options</h1>
         {#if albumDetails}
-            <form on:submit|preventDefault={generatePoster} class="space-y-4">
-                <div>
-                    <label for="album-name" class="block text-sm font-medium text-gray-700"
+            <form on:submit|preventDefault={generatePoster} class="space-y-6">
+                <div class="grid grid-cols-5">
+                    <label for="album-name" class="block text-sm font-medium mb-1"
                     >Album Name</label
                     >
                     <input
                             id="album-name"
                             bind:value={albumDetails.collectionName}
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                            class="form-input col-span-5"
                     />
                 </div>
+
                 <div>
-                    <label for="album-artist" class="block text-sm font-medium text-gray-700"
-                    >Artist</label
+                    <label for="album-year" class="block text-sm font-medium mb-1"
+                    >Album Year</label
+                    >
+                    <input
+                            id="album-year"
+                            value={new Date(albumDetails.releaseDate).getFullYear()}
+                            class="form-input"
+                    />
+                </div>
+
+                <div class="grid grid-cols-5">
+                    <label for="album-artist" class="block text-sm font-medium mb-1"
+                    >Album Artist</label
                     >
                     <input
                             id="album-artist"
                             bind:value={albumDetails.artistName}
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                            class="form-input col-span-5"
                     />
                 </div>
 
-                <div class="flex items-center">
-                    <input id="copyright" type="checkbox" bind:checked={showCopyright} class="h-4 w-4 rounded border-gray-300 text-blue-600" />
-                    <label for="copyright" class="ml-2 block text-sm text-gray-900">Display copyright info</label>
+                <div class="flex items-center pt-2">
+                    <input
+                            id="copyright"
+                            type="checkbox"
+                            bind:checked={showCopyright}
+                            class="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
+                    />
+                    <label for="copyright" class="ml-3 block text-sm font-medium text-gray-900"
+                    >Display Copyright info?</label
+                    >
                 </div>
 
-                <h3 class="text-xl font-bold pt-4">Tracklist</h3>
-                <div class="tracklist space-y-2">
-                    {#each tracklist as track, i (i)}
-                        <div class="grid grid-cols-12 gap-2 items-center">
-                            <span class="col-span-1 text-right text-sm text-gray-500">{i + 1}.</span>
-                            <input
-                                    bind:value={track.trackName}
-                                    placeholder="Track Name"
-                                    class="col-span-8 mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                            />
-                            <input
-                                    bind:value={track.trackTime}
-                                    placeholder="mm:ss"
-                                    class="col-span-3 mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                            />
-                        </div>
-                    {/each}
+                <div>
+                    <h3 class="text-xl font-bold text-gray-700 mb-4">Tracklist</h3>
+                    <div class="tracklist space-y-2">
+                        {#each tracklist as track, i (i)}
+                            <div class="grid grid-cols-5 gap-2 items-center">
+                                <input
+                                        bind:value={track.trackName}
+                                        placeholder="Track Name"
+                                        class="form-input col-span-4 mt-1"
+                                />
+                                <input
+                                        bind:value={track.trackTime}
+                                        placeholder="mm:ss"
+                                        class="form-input col-span-1 mt-1 text-right"
+                                />
+                            </div>
+                        {/each}
+                    </div>
                 </div>
 
                 <div class="pt-4">
                     <button
                             type="submit"
                             disabled={isGenerating}
-                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-blue-700 disabled:bg-blue-300"
+                            class="w-full bg-black text-white py-3 px-4 rounded-full font-semibold hover:bg-gray-800 disabled:bg-gray-400 transition"
                     >
                         {isGenerating ? 'Generating...' : 'Regenerate Poster'}
                     </button>
@@ -169,7 +197,7 @@
         {/if}
     </div>
 
-    <div class="poster-display bg-gray-800 flex items-center justify-center p-6">
+    <div class="poster-display bg-black flex flex-col items-center justify-center p-6">
         {#if isGenerating}
             <div class="text-white">Loading Poster...</div>
         {:else if posterUrl}
@@ -177,17 +205,23 @@
                 <img
                         src={posterUrl}
                         alt="Generated album poster"
-                        class="max-h-[80vh] w-auto shadow-2xl rounded-lg"
+                        class="max-h-[75vh] w-auto shadow-2xl rounded-lg"
+                        on:load={handleImageLoad}
                 />
+                {#if imageResolution}
+                    <p class="text-white mt-4">Resolution: {imageResolution}</p>
+                {/if}
                 <button
                         on:click={saveImage}
-                        class="mt-4 bg-white text-gray-800 py-2 px-6 rounded-md font-semibold hover:bg-gray-200"
+                        class="mt-4 bg-white text-black py-3 px-8 rounded-full font-semibold hover:bg-gray-200 transition"
                 >
                     Save Image
                 </button>
             </div>
         {:else}
-            <div class="text-red-400">Could not generate poster. Please try again.</div>
+            <div class="text-red-400 p-8 bg-red-900/20 rounded-lg">
+                Could not generate poster. Please try again.
+            </div>
         {/if}
     </div>
 </div>
