@@ -7,15 +7,14 @@ const config = {
 
     kit: {
         adapter: adapter({
-            // default options are fine for most cases
             pages: 'build',
             assets: 'build',
-            fallback: undefined,
+            fallback: 'index.html',
             precompress: false,
             strict: true
         }),
         paths: {
-            base: process.env.NODE_ENV === 'production' ? '/AlbumPosterGenerator' : '',
+            base: process.env.NODE_ENV === 'production' ? '/AlbumPosterGenerator' : ''
         }
     }
 };
