@@ -126,18 +126,18 @@
                     <input
                             id="album-name"
                             bind:value={albumDetails.collectionName}
-                            class="form-input col-span-5"
+                            class="form-input col-span-5 left-aligned"
                     />
                 </div>
 
-                <div>
+                <div class="grid grid-cols-5">
                     <label for="album-year" class="block text-sm font-medium mb-1"
                     >Album Year</label
                     >
                     <input
                             id="album-year"
                             value={new Date(albumDetails.releaseDate).getFullYear()}
-                            class="form-input"
+                            class="form-input col-span-5 left-aligned"
                     />
                 </div>
 
@@ -148,7 +148,7 @@
                     <input
                             id="album-artist"
                             bind:value={albumDetails.artistName}
-                            class="form-input col-span-5"
+                            class="form-input col-span-5 left-aligned"
                     />
                 </div>
 
@@ -172,12 +172,12 @@
                                 <input
                                         bind:value={track.trackName}
                                         placeholder="Track Name"
-                                        class="form-input col-span-4 mt-1"
+                                        class="form-input col-span-4 mt-1 left-aligned"
                                 />
                                 <input
                                         bind:value={track.trackTime}
                                         placeholder="mm:ss"
-                                        class="form-input col-span-1 mt-1 text-right"
+                                        class="form-input col-span-1 mt-1 text-center"
                                 />
                             </div>
                         {/each}
